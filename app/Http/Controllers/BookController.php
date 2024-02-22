@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\Ulasan;
 use App\Models\KategoriBuku;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -36,11 +38,12 @@ class BookController extends Controller
         $books = Buku::create([
             'judul' => $request->judul,
             'penulis' => $request->penulis,
-            'category_id' => $request->category,
             'penerbit' => $request->penerbit,
             'image' => $nameimg,
             'tahun_terbit' => $request->tahun_terbit
         ]);
+
+        $books->category()->sync($request->category_id);
 
         return redirect('/buku')->with('success', 'Buku berhasil di tambahkan');
 
@@ -75,17 +78,30 @@ class BookController extends Controller
         $books = Buku::find($request->id)->update([
             'judul' => $request->judul,
             'penulis' => $request->penulis,
-            'category_id' => $request->category,
             'penerbit' => $request->penerbit,
             'image' => $nameimg,
             'tahun_terbit' => $request->tahun_terbit
         ]);
 
+        
+        
         return redirect('/buku')->with('success', 'Buku berhasil di update');
     }
 
     public function destroy(Request $request){
         $hapusbuku = Buku::find($request->id)->delete();
         return redirect('/buku')->with('success', 'Buku berhasil di hapus');
+    }
+
+    public function ulasan(Request $request){
+        $simpan_ulasan = Ulasan::create([
+            'user_id' => Auth::user()->id,
+            'book_id' => $request->id,
+            'ulasan' => $request->ulasan,
+            'rating' => $request->rating,
+        ]);
+
+        return redirect('/book-detail/'. $request->id)->with('success', 'Ulasan di tambahkan');
+
     }
 }

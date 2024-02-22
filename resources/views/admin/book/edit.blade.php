@@ -22,7 +22,7 @@
 
                         <div class="mb-4">
                             <label for="defaultFormControlInput" class="form-label">Pilih Category</label>
-                            <select class="form-select" name="category">
+                            <select class="form-select" name="category_id[]" multiple>
                                 @foreach ($category as $item)
                                     <option value="{{ $item->id }}">{{ $item->nama_kategori }}</option>
                                 @endforeach

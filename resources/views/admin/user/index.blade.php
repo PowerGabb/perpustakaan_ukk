@@ -31,9 +31,9 @@
             <td>{{$item->role->name}}</td>
             <td>
             @if ($item->role_id == 2)
-            <a href="/user-down/{{$item->id}}" class="btn btn-dark btn-sm">Jadikan Peminjam</a>
+            <a href="/user-down/{{$item->id}}" class="btn btn-primary btn-sm">Jadikan Peminjam</a>
             @elseif ($item->role_id == 3)
-            <a href="/user-acc/{{$item->id}}" class="btn btn-dark btn-sm">Jadikan Petugas</a>
+            <a href="/user-acc/{{$item->id}}" class="btn btn-danger btn-sm">Jadikan Petugas</a>
             @endif
           </td>
             

@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('nama_lengkap');
             $table->string('password');
             $table->string('email');
+            $table->string('foto', 255)->nullable(true);
+            $table->text('alamat')->nullable(true);
             $table->timestamps();
         });
     }

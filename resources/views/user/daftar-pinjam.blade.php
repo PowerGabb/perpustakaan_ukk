@@ -18,17 +18,22 @@
                         <th>Judul Buku</th>
                         <th>Status</th>
                         <th>Tanggal Peminjaman</th>
+                        <th>Tanggal Wajib Pengembalian</th>
+                        <th>Status Pinjaman</th>
                         <th>Tanggal Pengembalian</th>
-                        <th>Action</th>
+                        <th>Info</th>
+                        
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @foreach ($pinjaman as $item)
+                    @forelse ($pinjaman as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->buku->judul }}</td>
-                            <td>{{ $item->status }}</td>
+                            <td><p class="text-primary">{{ $item->status }}</p></td>
                             <td>{{ $item->tanggal_peminjaman }}</td>
+                            <td>{{ $item->tanggal_wajib_pengembalian }}</td>
+                            
                             <td>
                                 @if ($item->tanggal_pengembalian == null)
                                     <p>belum dikembalikan</p>
@@ -36,15 +41,24 @@
                                     {{ $item->tanggal_pengembalian }}
                                 @endif
                             </td>
+                            <td>{{$item->tanggal_pengembalian}}</td>
                             <td>
                                 @if ($item->status == 'menunggu')
-                                ... 
-                                @else
-                                <a href="" class="btn btn-primary btn-sm">Kembalikan Buku</a>
+                                <p class="text-primary">Menunggu di izinkan</p>
+                                @elseif($item->status == 'dipinjam')
+                                <p class="text-primary">Harap kembalikan buku kepada admin setelah selesai meminjam</p>
+                                @elseif ($item->status == "selesai")
+                                <p class="text-success">Selesai Di Pinjam</p>
                                 @endif
                             </td>
+                    
                         </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="6"><p class="text-danger text-center">Tidak Ada Yang Di Pinjam</p></td>
+                    </tr>
+                    @endforelse
+                    
                 </tbody>
             </table>
         </div>

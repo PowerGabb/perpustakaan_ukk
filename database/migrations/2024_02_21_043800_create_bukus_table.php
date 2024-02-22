@@ -18,7 +18,7 @@ class CreateBukusTable extends Migration
             $table->string('judul');
             $table->string('penulis');
             $table->string('penerbit');
-            $table->date('date');
+            $table->date('tahun_terbit');
             $table->timestamps();
         });
     }

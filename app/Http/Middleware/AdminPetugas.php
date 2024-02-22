@@ -18,9 +18,11 @@ class AdminPetugas
     public function handle(Request $request, Closure $next)
     {
 
-        if (Auth::user()->role_id != 1) {
-            return redirect('/home');
+        $roleuser = Auth::user()->role_id;
+
+        if (in_array($roleuser, [1,2])) {
+            return $next($request);
         }
-        return $next($request);
+        return redirect('/home');
     }
 }

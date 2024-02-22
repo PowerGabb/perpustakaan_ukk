@@ -16,8 +16,8 @@
           <tr>
             <th>No</th>
             <th>Judul Buku</th>
-            <th>Category Buku</th>
             <th>Cover Buku</th>
+            <th>Category</th>
             <th>Penulis</th>
             <th>Penerbit</th>
             <th>Action</th>  
@@ -28,8 +28,12 @@
           <tr>
             <td>{{$loop->iteration}}</td>
             <td>{{$item->judul}}</td>
-            <td>{{$item->category->nama_kategori}}</td>
             <td><img src="{{asset('storage/cover/'. $item->image)}}" alt="image" width="100"></td>
+            <td>
+              @foreach ($item->category as $datass)
+                  {{$datass->nama_kategori}}
+              @endforeach
+            </td>
             <td>{{$item->penulis}}</td>
             <td>{{$item->penerbit}}</td>
             <td>

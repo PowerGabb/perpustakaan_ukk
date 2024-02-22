@@ -15,8 +15,9 @@ class Buku extends Model
     protected $fillable = ['judul', 'penerbit', 'tahun_terbit', 'image', 'penulis', 'category_id'];
 
  
-    public function category(): BelongsTo
+    
+    public function category(): BelongsToMany
     {
-        return $this->belongsTo(KategoriBuku::class);
+        return $this->belongsToMany(KategoriBuku::class, 'kategori_pivots', 'book_id', 'category_id');
     }
 }

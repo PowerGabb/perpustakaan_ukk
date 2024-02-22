@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Peminjaman;
 use App\Models\KategoriBuku;
 use Illuminate\Http\Request;
+use App\Models\KoleksiPribadi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -20,6 +21,12 @@ class UserController extends Controller
 
         $role = Role::all();
         return view('admin.user.create', compact('role'));
+    }
+
+    public function profile(){
+
+        $user = User::findOrFail(Auth::user()->id);
+        return view('profile', compact('user'));
     }
 
     public function store(Request $request){
@@ -69,5 +76,56 @@ class UserController extends Controller
     public function listPinjam(){
         $pinjaman = Peminjaman::with(['user', 'buku'])->where('user_id', Auth::user()->id)->get();
         return view('user.daftar-pinjam', compact('pinjaman'));
+    }
+
+    public function koleksi(){
+
+        $bukus = KoleksiPribadi::with(['book', 'user'])->get();
+       
+        return view('user.koleksi', compact('bukus'));
+    }
+
+    public function simpanKoleksi($id){
+
+        KoleksiPribadi::create([
+            'user_id' => Auth::user()->id,
+            'book_id' => $id
+        ]);
+
+        return redirect('/koleksi')->with('success', 'Buku berhasil di simpan ke koleksi');
+    }
+
+    public function destroy(Request $request){
+        $hapusbuku = KoleksiPribadi::find($request->id)->delete();
+        return redirect('/koleksi')->with('success', 'Koleksi berhasil di hapus');
+    }
+
+    public function profileUpdate(Request $request){
+        
+
+        if ($request->has('image')) {
+            
+            $extension = $request->file('image')->extension();
+            $nameimg = $request->username . '-' . now()->format('Y-m-d') . '.' . $extension;
+            $request->file('image')->storeAs('public/profile/', $nameimg);
+        }   
+        else{
+            $nameimg = null;
+        }
+
+        $user_update = User::find($request->id)->update([
+            'username' => $request->username,
+            'email' => $request->email,
+            'nama_lengkap' => $request->nama_lengkap,
+            'foto' => $nameimg,
+            'alamat' => $request->alamat,
+        ]);
+
+        return redirect('/profile');
+    }
+
+    public function deleteUser(Request $request){
+        $delete = User::find($request->id)->delete();
+        return redirect('/logout');
     }
 }
